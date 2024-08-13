@@ -1,0 +1,87 @@
+/* this is the code for checking the password strength that is used to create any account*/
+
+package libtask;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+
+public class PasswordStrength {
+
+	    public static void main(String[] args) {
+	        Scanner scanner = new Scanner(System.in);
+	        System.out.print("Enter a password to check its strength: ");
+	        String password = scanner.nextLine();
+
+	        int strength = checkPasswordStrength(password);
+	        System.out.println("Password Strength: " + strength + "/5");
+	        System.out.println(getFeedback(password));
+	    }
+
+	    public static int checkPasswordStrength(String password) {
+	        int strength = 0;
+
+	        // Check length
+	        if (password.length() >= 8) {
+	            strength++;
+	        }
+
+	        // Check for lowercase letters
+	        if (password.matches(".[a-z].")) {
+	            strength++;
+	        }
+
+	        // Check for uppercase letters
+	        if (password.matches(".[A-Z].")) {
+	            strength++;
+	        }
+
+	        // Check for digits
+	        if (password.matches(".\\d.")) {
+	            strength++;
+	        }
+
+	        // Check for special characters
+	        if (password.matches(".[!@#$%^&(),.?\":{}|<>].*")) {
+	            strength++;
+	        }
+
+	        return strength;
+	    }
+
+	    public static String getFeedback(String password) {
+	        StringBuilder feedback = new StringBuilder();
+
+	        if (password.length() < 8) {
+	            feedback.append("Password should be at least 8 characters long.\n");
+	        }
+	        if (!password.matches(".[a-z].")) {
+	            feedback.append("Password should include lowercase letters.\n");
+	        }
+	        if (!password.matches(".[A-Z].")) {
+	            feedback.append("Password should include uppercase letters.\n");
+	        }
+	        if (!password.matches(".\\d.")) {
+	            feedback.append("Password should include digits.\n");
+	        }
+	        if (!password.matches(".[!@#$%^&(),.?\":{}|<>].*")) {
+	            feedback.append("Password should include special characters.\n");
+	        }
+	        if (hasLowUniqueness(password)) {
+	            feedback.append("Password should have a higher uniqueness of characters.\n");
+	        }
+
+	        if (feedback.length() == 0) {
+	            feedback.append("Password is strong!");
+	        }
+
+	        return feedback.toString();
+	    }
+
+	    public static boolean hasLowUniqueness(String password) {
+	        Set<Character> uniqueChars = new HashSet<>();
+	        for (char c : password.toCharArray()) {
+	            uniqueChars.add(c);
+	        }
+	        return uniqueChars.size() <= password.length() * 0.7;
+	    }
+	}
